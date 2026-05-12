@@ -1,0 +1,18 @@
+{
+  "name": "三方平台内容爬取",
+  "version": "1.0.0",
+  "description": "从抖音、TikTok等三方平台提取媒资信息",
+  "author": "Guo Yuanwei",
+  "repository": "https://github.com/g37613182-tech/comfyui-third-party-fetcher",
+  "dependencies": [
+    "bytedance.captools>=0.0.24"
+  ],
+  "pip": {
+    "index_url": "https://bytedpypi.byted.org/simple",
+    "packages": [
+      "bytedance.captools>=0.0.24"
+    ]
+  },
+  "category": "media/fetch",
+  "display_name": "🌐 三方平台内容爬取"
+}

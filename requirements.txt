@@ -1,2 +1,4 @@
+# ByteDance internal PyPI
 --index-url https://bytedpypi.byted.org/simple
+
 bytedance.captools>=0.0.24
