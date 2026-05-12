@@ -5,14 +5,29 @@
 
 ## 📦 安装
 
+### 方式1：自动安装（推荐）
+插件会在加载时自动安装所需的 CapTools SDK，无需手动操作：
+
 ```bash
 cd ComfyUI/custom_nodes
 git clone https://github.com/g37613182-tech/comfyui-third-party-fetcher.git
-cd comfyui-third-party-fetcher
+```
+
+然后重启 ComfyUI，插件会自动安装依赖。
+
+### 方式2：手动安装
+如果自动安装失败，可以手动安装：
+
+```bash
+cd ComfyUI/custom_nodes/comfyui-third-party-fetcher
 pip install 'bytedance.captools>=0.0.24'
 ```
 
-**重要**：必须安装 `bytedance.captools` SDK，版本 >= 0.0.24。
+### BA 平台专用
+在字节 BA 平台使用时：
+1. 直接安装插件包即可
+2. 插件会自动尝试安装 `bytedance.captools`
+3. 如果自动安装失败，请截图终端报错信息，联系平台管理员
 
 ## 🔧 配置
 
