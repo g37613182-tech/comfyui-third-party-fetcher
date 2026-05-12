@@ -5,6 +5,9 @@
 
 ## 📦 安装
 
+### 版本说明
+**当前版本: 1.1.0** (BA平台专用版)
+
 ### 通用安装
 
 ```bash
@@ -14,17 +17,24 @@ git clone https://github.com/g37613182-tech/comfyui-third-party-fetcher.git
 
 ### BA 平台专用（字节内部）
 
-BA 平台会自动读取 `requirements.txt` 并安装依赖：
+**安装命令（供 BA 平台管理员参考）：**
+```bash
+pip install bytedance.captools==0.1.65 -i https://bytedpypi.byted.org/simple
+```
 
+**安装步骤：**
 1. **安装插件包**：直接上传或克隆插件到 `custom_nodes/`
-2. **重启 ComfyUI**：BA 平台会自动安装 `bytedance.captools`
+2. **重启 ComfyUI**：BA 平台会自动读取 `requirements.txt` 并安装依赖
 3. **完成**：依赖安装后节点即可使用
 
-依赖声明：
-- `requirements.txt` - 声明了字节内部源和依赖包
+**依赖声明文件：**
+- `requirements.txt` - 包含精确版本和内部源
 - `manifest.json` - BA 平台依赖清单
 
-如果依赖未自动安装，请联系 BA 平台管理员。
+**如果依赖未自动安装，请将此命令提供给 BA 平台管理员：**
+```
+pip install bytedance.captools==0.1.65 -i https://bytedpypi.byted.org/simple
+```
 
 ## 🔧 配置
 

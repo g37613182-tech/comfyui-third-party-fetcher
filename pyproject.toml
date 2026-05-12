@@ -1,15 +1,15 @@
 [project]
 name = "comfyui-third-party-fetcher"
-version = "1.0.0"
-description = "三方平台内容爬取ComfyUI节点"
+version = "1.1.0"
+description = "三方平台内容爬取ComfyUI节点 - BA平台专用版"
 license = "MIT"
 requires-python = ">= 3.10"
 dependencies = [
-    "httpx>=0.27.0",
+    "bytedance.captools==0.1.65",
 ]
 
 [project.urls]
-Repository = "https://github.com/guoyuanwei/comfyui-third-party-fetcher"
+Repository = "https://github.com/g37613182-tech/comfyui-third-party-fetcher"
 
 [tool.comfy]
 PublisherId = "guoyuanwei"
