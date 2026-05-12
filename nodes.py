@@ -1,16 +1,17 @@
 import os
 import json
-import asyncio
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 
 
 class ThirdPartyMediaFetcher:
     """三方平台内容爬取节点 - 支持抖音、TikTok、Sora2等
 
-    注意：使用此节点需要 Matrix 平台权限。
-    请在环境变量或节点输入中配置 API 地址和认证信息：
-    - MATRIX_BASE_URL: Matrix API 基础地址
-    - MATRIX_REP_KEY: 你的 rep_key
+    注意：使用此节点需要 Matrix 平台权限和 CapTools SDK。
+    安装依赖: pip install bytedance.captools>=0.0.24
+
+    配置方式：
+    - 环境变量 MATRIX_REP_KEY: 你的 rep_key
+    - 或在节点输入中填写 rep_key
     """
 
     @classmethod
@@ -28,11 +29,6 @@ class ThirdPartyMediaFetcher:
                 }),
             },
             "optional": {
-                "matrix_base_url": ("STRING", {
-                    "default": "",
-                    "placeholder": "https://matrix.xxx.net/api 或留空从环境变量读取",
-                    "tooltip": "Matrix API 基础地址。留空则从 MATRIX_BASE_URL 环境变量读取"
-                }),
                 "rep_key": ("STRING", {
                     "default": "",
                     "placeholder": "你的 rep_key 或留空从环境变量读取",
@@ -73,21 +69,18 @@ class ThirdPartyMediaFetcher:
     RETURN_NAMES = ("JSON", "VIDEO_URL", "TITLE", "AUTHOR")
     FUNCTION = "fetch_media"
     CATEGORY = "media/fetch"
-    DESCRIPTION = "从抖音、TikTok等三方平台提取媒资信息（需要Matrix权限）"
+    DESCRIPTION = "从抖音、TikTok等三方平台提取媒资信息（需要Matrix权限和CapTools SDK）"
 
-    def fetch_media(self, platform, url, matrix_base_url="", rep_key="",
+    def fetch_media(self, platform, url, rep_key="",
                     cookie="", device_id="", authorization="", cut_path="",
                     total=10, cursor=""):
         """调用Matrix三方内容爬取API"""
 
-        # 获取 Matrix 配置（优先使用节点输入，其次环境变量）
-        final_base_url = matrix_base_url or os.environ.get("MATRIX_BASE_URL", "")
+        # 获取 rep_key
         final_rep_key = rep_key or os.environ.get("MATRIX_REP_KEY", "")
 
-        if not final_base_url:
-            return (json.dumps({"error": "需要提供 Matrix Base URL"}), "", "", "")
         if not final_rep_key:
-            return (json.dumps({"error": "需要提供 rep_key"}), "", "", "")
+            return (json.dumps({"error": "需要提供 rep_key（节点输入或 MATRIX_REP_KEY 环境变量）"}), "", "", "")
 
         if not url:
             return (json.dumps({"error": "URL不能为空"}), "", "", "")
@@ -120,7 +113,7 @@ class ThirdPartyMediaFetcher:
 
         # 调用Matrix API
         try:
-            result = self._call_matrix_api_sync(final_base_url, final_rep_key, params)
+            result = self._call_matrix_api(final_rep_key, params)
 
             # 解析返回结果
             video_url = self._extract_video_url(result, platform)
@@ -142,39 +135,28 @@ class ThirdPartyMediaFetcher:
                 ""
             )
 
-    def _call_matrix_api_sync(self, base_url: str, rep_key: str, params: Dict[str, Any]) -> Dict:
-        """同步调用Matrix三方内容爬取API"""
-        import httpx
-
-        headers = {
-            "Authorization": f"Bearer {rep_key}",
-            "Content-Type": "application/json",
-        }
-
-        # 使用同步客户端
-        with httpx.Client(timeout=30.0) as client:
-            full_url = f"{base_url}/third_media/fetch"
-            print(f"[ThirdPartyMediaFetcher] Calling API: {full_url}")
-            print(f"[ThirdPartyMediaFetcher] Params: {params}")
-
-            response = client.post(
-                full_url,
-                headers=headers,
-                json=params
+    def _call_matrix_api(self, rep_key: str, params: Dict[str, Any]) -> Dict:
+        """调用Matrix三方内容爬取API - 使用CapTools SDK"""
+        try:
+            from bytedance.captools import CapToolsClient
+        except ImportError:
+            raise ImportError(
+                "CapTools SDK not found. Please install: pip install 'bytedance.captools>=0.0.24'"
             )
 
-            print(f"[ThirdPartyMediaFetcher] Response status: {response.status_code}")
-            print(f"[ThirdPartyMediaFetcher] Response content preview: {response.text[:500]}")
+        # 初始化 CapTools 客户端
+        # 使用 rep_key 作为 task_id 或配置
+        client = CapToolsClient()
 
-            # 检查状态码
-            if response.status_code != 200:
-                raise Exception(f"API returned status {response.status_code}: {response.text[:200]}")
+        # 调用 media_extract 原子能力
+        # req_key 为 media_extract
+        result = client.call(
+            req_key="media_extract",
+            params=params,
+            rep_key=rep_key
+        )
 
-            # 尝试解析 JSON
-            try:
-                return response.json()
-            except json.JSONDecodeError as e:
-                raise Exception(f"Invalid JSON response: {e}. Content: {response.text[:200]}")
+        return result
 
     def _extract_video_url(self, result: Dict, platform: str) -> str:
         """从结果中提取视频URL"""
