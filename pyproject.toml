@@ -1,0 +1,17 @@
+[project]
+name = "comfyui-third-party-fetcher"
+version = "1.0.0"
+description = "三方平台内容爬取ComfyUI节点"
+license = "MIT"
+requires-python = ">= 3.10"
+dependencies = [
+    "httpx>=0.27.0",
+]
+
+[project.urls]
+Repository = "https://github.com/guoyuanwei/comfyui-third-party-fetcher"
+
+[tool.comfy]
+PublisherId = "guoyuanwei"
+DisplayName = "三方平台内容爬取"
+Icon = "🌐"
