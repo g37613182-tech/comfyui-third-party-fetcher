@@ -1,87 +1,64 @@
 # ComfyUI 三方平台内容爬取节点
 
+## 🚀 功能
 从抖音、TikTok、Sora2等三方平台提取媒资信息。
 
-## 重要提示
-
-**此节点需要 Matrix 平台权限。**
-
-代码中**不包含任何默认的 API 地址或认证信息**。有权限的人需要自行配置才能使用。
-
-## 安装
+## 📦 安装
 
 ```bash
 cd ComfyUI/custom_nodes
-git clone https://github.com/guoyuanwei/comfyui-third-party-fetcher.git
+git clone https://github.com/g37613182-tech/comfyui-third-party-fetcher.git
 cd comfyui-third-party-fetcher
-pip install -r requirements.txt
+pip install 'bytedance.captools>=0.0.24'
 ```
 
-## 配置方式（二选一）
+**重要**：必须安装 `bytedance.captools` SDK，版本 >= 0.0.24。
+
+## 🔧 配置
 
 ### 方式1：环境变量（推荐）
-
-在启动 ComfyUI 前设置环境变量：
-
 ```bash
-export MATRIX_BASE_URL="https://matrix.xxx.net/api"
-export MATRIX_REP_KEY="your_rep_key_here"
-python main.py
-```
-
-Windows:
-```cmd
-set MATRIX_BASE_URL=https://matrix.xxx.net/api
-set MATRIX_REP_KEY=your_rep_key_here
-python main.py
+export MATRIX_REP_KEY="你的rep_key"
+python ComfyUI/main.py
 ```
 
 ### 方式2：节点输入
+在节点中直接填写 `rep_key` 参数。
 
-在工作流中直接填写：
-- `matrix_base_url`: Matrix API 基础地址
-- `rep_key`: 你的 rep_key
+## 🎯 使用
 
-## 使用
+### 节点参数
+- **platform**: 平台选择 (douyin/tiktok/sora)
+- **url**: 三方平台内容链接
+- **rep_key**: Matrix rep_key（或通过环境变量）
+- **cookie**: Cookie信息（TikTok/Sora需要）
+- **device_id**: Device ID（TikTok需要）
+- **authorization**: Authorization Token（Sora需要）
+- **cut_path**: Sora导航路径
+- **total**: 获取数量（Sora用）
+- **cursor**: 分页游标（Sora用）
 
-在ComfyUI中添加 "🌐 三方平台内容爬取" 节点：
-
-1. **配置 Matrix 连接**（如果未设置环境变量）
-   - 填写 `matrix_base_url`
-   - 填写 `rep_key`
-
-2. **选择平台**（douyin/tiktok/sora）
-
-3. **输入 URL**
-
-4. **根据平台要求填写鉴权参数**
-   - TikTok: Cookie + Device ID
-   - Sora: Cookie + Authorization
-
-5. **运行工作流**
-
-## 输出
-
-- **JSON**: 返回的完整JSON数据
+### 输出
+- **JSON**: 完整返回数据
 - **VIDEO_URL**: 视频直链
 - **TITLE**: 视频标题
 - **AUTHOR**: 作者信息
 
-## 支持平台
+## ⚠️ 注意事项
 
-| 平台 | 状态 | 必需参数 |
-|------|------|----------|
-| 抖音 | ✅ | URL |
-| TikTok | ✅ | URL, Cookie, Device ID |
-| Sora2 | ✅ | URL, Cookie, Authorization |
+1. **需要 Matrix 平台权限**，必须有有效的 rep_key
+2. **TikTok 需要在海外环境执行**
+3. **CapTools SDK 是必须的依赖**
+4. 请妥善保管 rep_key，不要提交到公开仓库
 
-## 注意事项
+## 🛠️ 技术栈
+- ComfyUI V1 API
+- CapTools Python SDK
+- httpx (通过 SDK内部使用)
 
-- 此节点需要字节内部 Matrix 平台权限
-- TikTok 需要在海外环境执行
-- 请妥善保管 rep_key，不要提交到任何仓库
-- 没有权限的人无法使用此节点
+## 📄 许可证
+MIT License
 
-## 权限说明
-
-此节点本身只是一个客户端封装，**不包含任何内置权限**。只有拥有 Matrix 平台 rep_key 的人才能使用。
+## 🔗 相关文档
+- [Matrix 平台](https://capcut-aihub.bytedance.net/matrix/edit/media_extract)
+- [CapTools Python SDK](https://code.byted.org/capcut-server/agent_tool_common/tree/feat/agent_tool_sdk)
