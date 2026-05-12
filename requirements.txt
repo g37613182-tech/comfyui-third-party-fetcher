@@ -1,1 +1,2 @@
-httpx>=0.27.0
+--index-url https://bytedpypi.byted.org/simple
+bytedance.captools>=0.0.24

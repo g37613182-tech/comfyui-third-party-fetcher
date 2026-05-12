@@ -15,12 +15,12 @@ git clone https://github.com/g37613182-tech/comfyui-third-party-fetcher.git
 
 然后重启 ComfyUI，插件会自动安装依赖。
 
-### 方式2：手动安装
-如果自动安装失败，可以手动安装：
+### 方式2：手动安装（字节内部源）
+如果自动安装失败，使用字节内部源手动安装：
 
 ```bash
 cd ComfyUI/custom_nodes/comfyui-third-party-fetcher
-pip install 'bytedance.captools>=0.0.24'
+pip install -i https://bytedpypi.byted.org/simple 'bytedance.captools>=0.0.24'
 ```
 
 ### BA 平台专用

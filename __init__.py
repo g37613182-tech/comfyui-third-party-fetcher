@@ -11,12 +11,13 @@ def ensure_captools_installed():
     except ImportError:
         print("[ThirdPartyMediaFetcher] CapTools SDK not found, attempting to install...")
 
-        # 尝试安装
+        # 尝试安装（使用字节内部源）
         try:
             subprocess.check_call([
                 sys.executable, "-m", "pip", "install",
                 "--user",  # 安装到用户目录，避免权限问题
                 "--break-system-packages",  # 允许在系统环境中安装
+                "-i", "https://bytedpypi.byted.org/simple",  # 字节内部源
                 "bytedance.captools>=0.0.24"
             ])
 
@@ -32,7 +33,7 @@ def ensure_captools_installed():
 
         except subprocess.CalledProcessError as e:
             print(f"[ThirdPartyMediaFetcher] ❌ Failed to install CapTools SDK: {e}")
-            print("[ThirdPartyMediaFetcher] Please install manually: pip install 'bytedance.captools>=0.0.24'")
+            print("[ThirdPartyMediaFetcher] Please install manually: pip install -i https://bytedpypi.byted.org/simple 'bytedance.captools>=0.0.24'")
             return False
 
         except Exception as e:
