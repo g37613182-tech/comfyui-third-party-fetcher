@@ -2,12 +2,15 @@ import os
 import json
 from typing import Dict, Any, Optional
 
+# 版本号
+__version__ = "1.1.0"
+
 
 class ThirdPartyMediaFetcher:
-    """三方平台内容爬取节点 - 支持抖音、TikTok、Sora2等
+    """三方平台内容爬取节点 v1.1.0 - 支持抖音、TikTok、Sora2等
 
     注意：使用此节点需要 Matrix 平台权限和 CapTools SDK。
-    安装依赖: pip install bytedance.captools>=0.0.24
+    安装依赖: pip install bytedance.captools==0.1.65 -i https://bytedpypi.byted.org/simple
 
     配置方式：
     - 环境变量 MATRIX_REP_KEY: 你的 rep_key
@@ -141,7 +144,7 @@ class ThirdPartyMediaFetcher:
             from bytedance.captools import CapToolsClient
         except ImportError:
             raise ImportError(
-                "CapTools SDK not found. Please install: pip install 'bytedance.captools>=0.0.24'"
+                "CapTools SDK not found (v1.1.0). BA Platform: pip install bytedance.captools==0.1.65 -i https://bytedpypi.byted.org/simple"
             )
 
         # 初始化 CapTools 客户端
@@ -206,5 +209,5 @@ NODE_CLASS_MAPPINGS = {
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "ThirdPartyMediaFetcher": "🌐 三方平台内容爬取",
+    "ThirdPartyMediaFetcher": "🌐 三方平台内容爬取 v1.1.0",
 }
