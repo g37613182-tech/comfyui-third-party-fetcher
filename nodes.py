@@ -153,13 +153,28 @@ class ThirdPartyMediaFetcher:
 
         # 使用同步客户端
         with httpx.Client(timeout=30.0) as client:
+            full_url = f"{base_url}/third_media/fetch"
+            print(f"[ThirdPartyMediaFetcher] Calling API: {full_url}")
+            print(f"[ThirdPartyMediaFetcher] Params: {params}")
+
             response = client.post(
-                f"{base_url}/third_media/fetch",
+                full_url,
                 headers=headers,
                 json=params
             )
-            response.raise_for_status()
-            return response.json()
+
+            print(f"[ThirdPartyMediaFetcher] Response status: {response.status_code}")
+            print(f"[ThirdPartyMediaFetcher] Response content preview: {response.text[:500]}")
+
+            # 检查状态码
+            if response.status_code != 200:
+                raise Exception(f"API returned status {response.status_code}: {response.text[:200]}")
+
+            # 尝试解析 JSON
+            try:
+                return response.json()
+            except json.JSONDecodeError as e:
+                raise Exception(f"Invalid JSON response: {e}. Content: {response.text[:200]}")
 
     def _extract_video_url(self, result: Dict, platform: str) -> str:
         """从结果中提取视频URL"""
